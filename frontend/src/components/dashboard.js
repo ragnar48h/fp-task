@@ -1,15 +1,23 @@
-import React from 'react';
-
-const people = [
-  {
-    userId: 1,
-    id: 1,
-    title: "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-    body: "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-  },
-]
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
   
 export default function Dashboard() {
+  let [data, setData] = useState(null);
+
+  useEffect(() => {
+    refreshList();
+  }, []);
+
+  let refreshList = () => {
+    axios.
+    get("http://localhost:8000/api/data/")
+    .then((res) => {
+      setData(res.data)
+      console.log(res.data);
+    })
+    .catch((err) => console.log(err))
+  }
+
   return (
     <div className="flex flex-col p-6">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -45,28 +53,28 @@ export default function Dashboard() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {people.map((person) => (
-                  <tr key={person.email}>
+                {data !== null && data.map((item) => (
+                  <tr key={item.email}>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="text-sm font-medium text-gray-900">{person.id}</div>
+                        <div className="text-sm font-medium text-gray-900">{item.data.id}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <div className="text-sm font-medium text-gray-900">{person.userId}</div>
+                        <div className="text-sm font-medium text-gray-900">{item.data.userId}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{person.title}</div>
+                      <div className="text-sm text-gray-900">{item.data.title}</div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">{person.body}</div>
+                      <div className="text-sm text-gray-900">{item.data.body}</div>
                     </td>
                   </tr>
                 ))}
               </tbody>
-              {people.length === 0 && (
+              {(data === null || data.length === 0) && (
                 <div className="flex text-sm text-gray-600 items-center py-4 pl-6">
                   <span className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500">No Data Found: </span>
                   <p className="pl-1">Upload JSON File.</p>

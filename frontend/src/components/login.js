@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function Login() {
     // const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [credentials, setCredentials] = useState({username: "", password: ""});
+    const [errorLogin, seterrorLogin] = useState(false);
 
     let history = useHistory();
     // let authCheck = () => {
@@ -20,18 +21,6 @@ export default function Login() {
     let login = event => {
       event.preventDefault();
       console.log("hello");
-      // axios({
-      //   method: 'post',
-      //   url: '/login',
-      //   data: {
-      //       username: 'hmk',
-      //       password: 'hmk@123'
-      //   },
-      //   headers: {
-      //   Accept: 'application/json',
-      //   'Content-Type': 'application/json',
-      //   }
-      // })
       axios.post('http://localhost:8000/login/', credentials,
       {
         headers: {
@@ -40,11 +29,15 @@ export default function Login() {
         }
       })
       .then(res => {
+        if(errorLogin){
+          seterrorLogin(false)
+        }
         console.log(res);
         history.push('./home')
       })
       .catch(err => {
         console.log(err);
+        seterrorLogin(true)
       })
       
     }
@@ -128,6 +121,9 @@ export default function Login() {
                 Log in
               </button>
             </div>
+            {errorLogin && (
+              <h2 className="mt-6 text-center text-m font-bold text-red-500">Not a user. Please sign up first.</h2>
+            )}
           </form>
         </div>
       </div>

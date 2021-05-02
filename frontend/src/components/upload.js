@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-
+import axios from 'axios';
 
 export default function Upload () {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileSelected, setFileSelected] = useState(false);
   const [fileValid, setFileValidation] = useState(false);
-  const [data, setData] = useState(null);
+  const [data, setData] = useState({});
   
   const handleDragEnter = e => {
     e.preventDefault();
@@ -55,14 +55,31 @@ export default function Upload () {
     const reader = new FileReader()
     reader.onload = async (e) => { 
       const text = (e.target.result)
-      console.log(typeof text)
+      console.log("Text Type: ",typeof text)
       let JSONData = JSON.parse(text);
+      console.log("set data:", JSONData);
       setData(JSONData);
     };
     reader.readAsText(selectedFile[0])
   }
+  const uploadData = () => {
+    for (let index = 0; index < data.length; index++) {
+      let currentData = data[index];
+      // console.log("data1: ",data[1]);
+      // console.log("Cure:",currentData);
+      let payLoad = {
+        "data": currentData,
+      };
+      console.log("Payload: ",payLoad)
+      axios
+      .post("http://localhost:8000/api/data/", payLoad)
+      .then((res) => console.log(res))
+      .catch(err => console.log(err))
+    }
+  }
   const check = () => {
-    console.log(data);
+    uploadData();
+    console.log(data[0]);
   }
     return (
       <div className="p-8 bg-gray-50">
@@ -146,9 +163,9 @@ export default function Upload () {
           <button
             onClick={check}
             type="submit"
-            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            className="ml-5 inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
-            CHECK
+            Submit
           </button>
         </div>
       </div>

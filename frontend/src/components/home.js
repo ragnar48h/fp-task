@@ -1,16 +1,18 @@
 import React, {useState} from 'react';
 import Dashboard from './dashboard';
 import Upload from './upload';
-
-const navigation = ['Dashboard', 'Upload new JSON']
+import {useHistory} from 'react-router-dom'
 
 export default function Home () {
     const [activeTab, changeTab] = useState("Dashboard");
+    let history = useHistory();
 
     let changeTabFunction = (tabName) => {
       changeTab(tabName);
     }
-
+    let logout = () => {
+      history.push('./')
+    }
     return (
         <div>
             <div className=" mx-auto px-4 sm:px-6 lg:px-8 bg-gray-800">
@@ -44,6 +46,7 @@ export default function Home () {
                   <div className="hidden md:flex items-center justify-end md:flex-1 lg:w-0">
                     <a
                       href="#"
+                      onClick={logout}
                       className="ml-8 whitespace-nowrap inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
                     >
                       Log out
