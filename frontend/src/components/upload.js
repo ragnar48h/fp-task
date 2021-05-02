@@ -5,6 +5,7 @@ export default function Upload () {
   const [selectedFile, setSelectedFile] = useState(null);
   const [fileSelected, setFileSelected] = useState(false);
   const [fileValid, setFileValidation] = useState(false);
+  const [data, setData] = useState(null);
   
   const handleDragEnter = e => {
     e.preventDefault();
@@ -51,6 +52,17 @@ export default function Upload () {
 
   const submit = () => {
     console.log(selectedFile)
+    const reader = new FileReader()
+    reader.onload = async (e) => { 
+      const text = (e.target.result)
+      console.log(typeof text)
+      let JSONData = JSON.parse(text);
+      setData(JSONData);
+    };
+    reader.readAsText(selectedFile[0])
+  }
+  const check = () => {
+    console.log(data);
   }
     return (
       <div className="p-8 bg-gray-50">
@@ -130,6 +142,13 @@ export default function Upload () {
             className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
           >
             Upload
+          </button>
+          <button
+            onClick={check}
+            type="submit"
+            className="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+          >
+            CHECK
           </button>
         </div>
       </div>

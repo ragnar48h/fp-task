@@ -20,14 +20,7 @@ export default function Login() {
     event.preventDefault();
     console.log("hello");
     console.log(credentials);
-    axios.post('http://localhost:8000/authJSON/users/', credentials,
-    {
-      headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      }
-    })
-    .then(data => data.json())
+    axios.post('http://localhost:8000/authJSON/users/', credentials)
     .then(data => {
       console.log(data);
       history.push('/home')
